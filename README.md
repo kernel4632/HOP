@@ -15,7 +15,7 @@
 ### OpenCode / Claude Code
 
 ```bash
-npx skills add <your-github-username>/HOP -g -y
+npx skills add kernel4632/HOP -g -y
 ```
 
 ### 手动安装
@@ -23,7 +23,7 @@ npx skills add <your-github-username>/HOP -g -y
 将本仓库克隆到你的 skills 目录：
 
 ```bash
-git clone https://github.com/<your-github-username>/HOP.git ~/.config/opencode/skills/hop
+git clone https://github.com/kernel4632/HOP.git ~/.config/opencode/skills/hop
 ```
 
 或者将 `SKILL.md` 及 `examples/`、`references/` 目录复制到项目根目录的 `.opencode/skills/hop/` 下，仅对该项目生效。
