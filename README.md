@@ -12,13 +12,19 @@
 
 ## 安装
 
-### OpenCode / Claude Code
+安装到当前项目，兼容所有 AI 编程工具（OpenCode、Claude Code、Cursor、Cline、Codex、Amp、Windsurf 等 70+ agent）：
+
+```bash
+npx skills add kernel4632/HOP -y --all
+```
+
+仅安装到全局（OpenCode）：
 
 ```bash
 npx skills add kernel4632/HOP -g -y --agent opencode
 ```
 
-也兼容 Claude Code：
+仅安装到全局（Claude Code）：
 
 ```bash
 npx skills add kernel4632/HOP -g -y --agent claude-code
@@ -29,10 +35,14 @@ npx skills add kernel4632/HOP -g -y --agent claude-code
 将本仓库克隆到你的 skills 目录：
 
 ```bash
+# OpenCode
 git clone https://github.com/kernel4632/HOP.git ~/.config/opencode/skills/hop
+
+# Claude Code
+git clone https://github.com/kernel4632/HOP.git ~/.claude/skills/hop
 ```
 
-或者将 `SKILL.md` 及 `examples/`、`references/` 目录复制到项目根目录的 `.opencode/skills/hop/` 下，仅对该项目生效。
+或者将 `SKILL.md` 及 `examples/`、`references/` 目录复制到项目根目录的 `.opencode/skills/hop/`（或 `.claude/skills/hop/`）下，仅对该项目生效。
 
 ## 目录结构
 
