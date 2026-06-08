@@ -15,7 +15,13 @@
 ### OpenCode / Claude Code
 
 ```bash
-npx skills add kernel4632/HOP -g -y
+npx skills add kernel4632/HOP -g -y --agent opencode
+```
+
+也兼容 Claude Code：
+
+```bash
+npx skills add kernel4632/HOP -g -y --agent claude-code
 ```
 
 ### 手动安装
