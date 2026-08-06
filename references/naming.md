@@ -1,54 +1,46 @@
 # 命名准则
 
-## 核心规则
+## 如何思考命名
 
-**不重复上下文已经提供的信息。**
+取名时，读出完整的调用语句，问自己：
 
-文件名、模块名、目录名已经告诉了读者"我是谁"，方法名只需要说"做什么"。调用时读出来，同一个词不应出现两次。
-
-## 语境命名示例
+**"同一个信息出现了几次？如果超过一次，多余的词删掉。"**
 
 ```js
-// 文件：commands/context.js
-Context.build()              // 正确：Context 已经说了主体
-Context.buildContext()       // 错误：context 说了两遍
-
-// 文件：commands/task.js
-Task.add()                   // 正确
-Task.addTask()               // 错误：task 说了两遍
-Task.getById()               // 正确
-Task.getTaskById()           // 错误
-
-// 文件在 commands/ 目录下
-export default Task          // 正确：目录说明了这是指令
-export default TaskCommand   // 错误：command 重复了目录信息
+Context.buildContext()   // "context" 出现了两次 → Context.build()
+Task.getTaskById()       // "task" 出现了两次 → Task.getById()
+Task.addTask()           // "task" 出现了两次 → Task.add()
 ```
 
-## 禁止的技术术语
+文件名、模块名、目录名已经说了"我是谁"。方法名只需要说"做什么"。
 
-以下命名禁止出现在文件名、类名、函数名中：
+## 想用技术术语命名时
 
-controller、service、repository、model、manager、handler、processor、dispatcher、factory、adapter、decorator、observer、helper、base、abstract、interface（作为前后缀时）
+问自己：**"这个名字是在说它做什么业务，还是在说它是什么技术角色？"**
 
-替代方式：直接用业务主体。`UserController` → `User`（放在 commands/ 下）。
+如果是技术角色（controller、service、manager、handler、helper、factory、adapter、processor），换成业务主体。文件所在的目录已经说明了它的角色。
+
+```
+UserController   → User（放在 commands/ 下）
+OrderService     → Order（放在 commands/ 下）
+TaskManager      → Task
+EventHandler     → Event
+```
 
 ## 方法命名
 
-动词 + 名词结构，名词部分只在主体之外的对象时才出现：
+动词 + 名词。名词部分只在涉及主体之外的对象时才出现：
 
-| 动作 | 示例 |
-|------|------|
-| 创建 | `add`、`create` |
-| 读取 | `get`、`getById`、`getPending` |
-| 修改 | `rename`、`update`、`toggle` |
-| 删除 | `remove`、`clear` |
-| 检查 | `check`、`canUndo` |
-
-注意：`getById` 而不是 `getTaskById`——因为调用时是 `Task.getById()`，上下文已经说了是 task。
+```js
+Task.add()              // 正确：主体是 Task，动作是 add
+Task.getById()          // 正确：动作是 get，限定是 ById
+Task.getPending()       // 正确：动作是 get，限定是 Pending
+User.rename()           // 正确：动作就是 rename
+```
 
 ## 变量命名
 
-直接说是什么：
+问自己："这个名字能让人直接知道它是什么吗？"
 
 | 类型 | 示例 |
 |------|------|
@@ -59,15 +51,17 @@ controller、service、repository、model、manager、handler、processor、disp
 
 ## 文件命名
 
-- 优先使用单个单词：`score`、`student`、`order`
-- 依靠目录上下文提供语义：`commands/user.js` 而不是 `commands/userCommand.js`
-- 只有目录上下文不够时才用多个单词
+问自己："目录已经提供了什么信息？文件名还需要重复吗？"
+
+- `commands/user.js` 而不是 `commands/userCommand.js`
+- `tools/format.js` 而不是 `tools/formatHelper.js`
+- 优先单个单词：`score`、`student`、`order`
 
 ## 缩写规则
 
 约定俗成缩写作为整体保留，不拆不变形。
 
-允许的固定缩写：`id`、`url`、`api`、`http`、`json`、`sse`、`sql`、`html`、`css`、`xml`、`svg`、`tcp`、`udp`、`ip`、`ui`、`io`
+允许的：`id`、`url`、`api`、`http`、`json`、`sse`、`sql`、`html`、`css`、`xml`、`svg`、`tcp`、`udp`、`ip`、`ui`、`io`
 
 禁止的非标准缩写：`usr`、`cfg`、`svc`、`repo`、`mgr`、`btn`、`msg`、`err`、`cb`、`fn`、`ctx`、`req`、`res`、`env`
 
@@ -79,9 +73,13 @@ controller、service、repository、model、manager、handler、processor、disp
 | 缩写跟在单词后 | 整体大写 | `userID`、`fileURL`、`parseJSON` |
 | 类名中 | 整体大写 | `HTTPServer`、`SSEStream` |
 
-## Python 命名补充
+## Python 补充
 
-Python 遵循 PEP 8 的 snake_case，但语境命名思想不变：
+Python 用 snake_case，但思考方式不变——读出调用语句，重复的信息删掉：
 
-- 函数名：`add`、`get_by_id`（不是 `add_task`、`get_task_by_id`）
-- 缩写在 Python 中保持全小写：`user_id`、`file_url`、`parse_json`
+```python
+# Task.add() 而不是 Task.add_task()
+# Task.get_by_id() 而不是 Task.get_task_by_id()
+```
+
+缩写在 Python 中全小写：`user_id`、`file_url`、`parse_json`
