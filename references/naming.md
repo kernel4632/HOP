@@ -15,10 +15,6 @@
 
 替代方式：直接用业务主体。`UserController` → `User`（放在 commands/ 下），`OrderService` → `Order`（放在 commands/ 下）。
 
-## 驼峰与缩写规则
-
-普通单词按驼峰连接。约定俗成缩写作为不可拆开的整体保留。
-
 ### 允许的固定缩写
 
 `id`、`url`、`api`、`http`、`json`、`sse`、`sql`、`html`、`css`、`xml`、`svg`、`tcp`、`udp`、`ip`、`ui`、`io`
@@ -89,13 +85,3 @@
 | `EdgeHelper` | `Edge` |
 
 调用时形如 `Node.add()`、`Edge.remove()`、`Task.toggle()`，文件路径 `commands/` 已经说明这是指令，无需在名字上重复。
-
-## Python 命名补充
-
-Python 遵循 PEP 8 的 snake_case 约定，但 HOP 的命名思想不变：
-
-- 函数名：`add_student`、`get_score`、`get_by_id`
-- 变量名：`user_name`、`total_score`
-- 布尔值：`is_ready`、`has_permission`
-- 文件名：`task.py`、`edge.py`（放在 `commands/` 下）
-- 缩写在 Python 中保持全小写：`user_id`、`file_url`、`parse_json`
