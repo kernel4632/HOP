@@ -137,5 +137,4 @@ HOP 的唯一目标：人可以凭直觉控制代码。
 - 架构组织：[references/architecture.md](references/architecture.md)
 - 命名规则：[references/naming.md](references/naming.md)
 - 注释格式：[references/comments.md](references/comments.md)
-- 经典原则（KISS / YAGNI / 最小惊讶 / 零注册等）：[references/principles.md](references/principles.md)
 - 正反代码对比：[examples/correct.js](examples/correct.js) · [examples/wrong.js](examples/wrong.js) · [examples/correct.py](examples/correct.py)
