@@ -84,8 +84,7 @@ HOP/
 ├── references/
 │   ├── architecture.md         # 架构组织
 │   ├── comments.md             # 注释格式
-│   ├── naming.md               # 命名规则
-│   └── principles.md           # 经典原则
+│   └── naming.md               # 命名规则
 └── README.md
 ```
 
