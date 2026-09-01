@@ -39,7 +39,17 @@ userArray      // 错误：Array 是类型后缀，多余
 
 ## 文件命名
 
-文件名优先单个单词，目录已经提供了语义：
+文件用被操作的实体主体命名，是一个名词。文件里写这个主体的动词方法。不用操作方法名当文件名：
+
+```python
+sandbox.py            # 正确：主体是沙盒，里面写 execute、stop 等方法
+budget.py             # 正确：主体是预算，里面写 add、spend 等方法
+
+execution_worker.py   # 错误：这是操作方法名，不是主体名
+recall_services.py    # 错误：操作方法名 + 技术术语
+```
+
+文件优先单个单词，目录已经提供了语义：
 
 ```js
 views/Chat.vue      // 正确：目录 views 已经说明是页面
@@ -49,9 +59,35 @@ commands/user.js        // 正确
 commands/userCommand.js // 错误：Command 重复了目录名
 ```
 
+## 文件夹命名
+
+文件夹用小白一眼能懂的词，不用技术分层词。让人看到文件夹名就知道里面放的是什么业务：
+
+```
+tools/          # 正确：放工具的，一看就懂
+plugins/        # 正确：放插件的
+commands/       # 正确：放指令的
+
+handlers/       # 错误：技术分层词，小白不懂
+repositories/   # 错误：技术分层词
+services/       # 错误：技术分层词
+```
+
+## 命名概念要轻
+
+不要用沉重的技术概念词，用最轻量的名词：
+
+```js
+users         // 正确：就是用户
+UserRepository // 错误：概念过大
+
+tasks         // 正确
+TaskCollection // 错误：概念过大
+```
+
 ## 禁止技术术语命名
 
-以下技术角色名词禁止出现在名字里，换成业务主体名：
+以下技术角色名词禁止出现在文件、文件夹、类、方法的名字里，换成业务主体名：
 
 controller、service、repository、model、manager、handler、processor、dispatcher、factory、adapter、decorator、observer、helper、base、abstract、interface
 
