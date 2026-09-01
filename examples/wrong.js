@@ -80,14 +80,14 @@ class TaskManager {
     }
 
     clearCompleted() {
-        // [违反修改安全] 直接替换整个数组，破坏了别处对原数组的引用
+        // [违反增删改方便] 直接替换整个数组，破坏了别处对原数组的引用
         store.tasks = store.tasks.filter(t => !t.done)
         // [违反注释] 没有注释
     }
 }
 
 const manager = new TaskManager()
-register(manager)    // [违反单一来源] 手动注册，删掉这个模块还要回来删这行
+register(manager)    // [违反增删改方便] 手动注册，删掉这个模块还要回来删这行
 
 export default manager
 // [违反极简命名] 导出 class 实例而不是纯函数对象

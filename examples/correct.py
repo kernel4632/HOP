@@ -9,26 +9,26 @@ from utils.generate_id import generate_id          # 引入唯一ID生成器
 
 # --- 添加任务 ---
 def add(title):
-    if not title or not title.strip():             # 标题为空时拒绝创建
+    if not title or not title.strip():             # 标题为空时拒绝创建（边界校验）
         return None
 
     id = generate_id()                             # 生成唯一任务ID
 
-    task = {                                       # 构建新任务
+    task = {                                       # 构建新任务字典
         "id": id,                                    # 任务唯一标识
-        "title": title.strip(),                      # 任务标题，去除首尾空格
+        "title": title.strip(),                      # 去除首尾空格后的标题
         "done": False,                               # 默认未完成
     }
 
-    store["tasks"].append(task)                    # 将任务加入全局列表
+    store["tasks"].append(task)                    # 写入全局任务列表
     return id                                      # 返回新任务ID供调用方使用
 
 
 # --- 删除任务 ---
 def remove(id):
     tasks = store["tasks"]                         # 读取任务列表
-    target = next((t for t in tasks if t["id"] == id), None)  # 查找目标任务
-    if not target:                                 # 任务不存在直接返回
+    target = next((t for t in tasks if t["id"] == id), None)  # 找到目标任务
+    if not target:                                 # 任务不存在，直接返回
         return
     tasks.remove(target)                           # 从列表中移除该任务
 
@@ -36,38 +36,40 @@ def remove(id):
 # --- 切换完成状态 ---
 def toggle(id):
     task = get(id)                                 # 查找目标任务
-    if not task:                                   # 任务不存在直接返回
+    if not task:                                   # 任务不存在，直接返回
         return
     task["done"] = not task["done"]                # 反转完成状态
 
 
 # --- 重命名任务 ---
 def rename(id, title):
-    if not title or not title.strip():             # 新标题为空时拒绝修改
+    if not title or not title.strip():             # 新标题为空时拒绝修改（边界校验）
         return
     task = get(id)                                 # 查找目标任务
-    if not task:                                   # 任务不存在直接返回
+    if not task:                                   # 任务不存在，直接返回
         return
     task["title"] = title.strip()                  # 更新任务标题
 
 
 # --- 按ID获取任务 ---
 def get(id):
-    return next((t for t in store["tasks"] if t["id"] == id), None)  # 返回匹配任务或None
+    return next(                                   # 返回匹配任务，找不到为 None
+        (t for t in store["tasks"] if t["id"] == id), None
+    )
 
 
-# --- 获取未完成任务 ---
+# --- 获取未完成任务列表 ---
 def pending():
-    return [t for t in store["tasks"] if not t["done"]]  # 过滤出未完成任务
+    return [t for t in store["tasks"] if not t["done"]]  # 过滤出所有未完成的任务
 
 
-# --- 获取已完成任务 ---
+# --- 获取已完成任务列表 ---
 def done():
-    return [t for t in store["tasks"] if t["done"]]  # 过滤出已完成任务
+    return [t for t in store["tasks"] if t["done"]]  # 过滤出所有已完成的任务
 
 
 # --- 清空已完成任务 ---
 def clear():
-    ids = [t["id"] for t in store["tasks"] if t["done"]]  # 提取已完成任务ID列表
-    for id in ids:                                 # 逐个删除已完成任务
+    ids = [t["id"] for t in store["tasks"] if t["done"]]  # 提取已完成任务的ID列表
+    for id in ids:                                 # 逐个调用 remove，保持单一职责
         remove(id)

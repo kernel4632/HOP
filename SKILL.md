@@ -149,4 +149,3 @@ import 语句说明引入的是什么能力，export 说明导出了什么，卫
 
 正确写法：[examples/correct.js](examples/correct.js) · [examples/correct.py](examples/correct.py)
 错误写法：[examples/wrong.js](examples/wrong.js)
-```
