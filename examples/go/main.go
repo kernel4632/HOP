@@ -1,26 +1,26 @@
 /*
-入口：触发所有工具自我登记，然后按名字执行一个工具。
-每个工具文件都空导入一次，它的 init() 就会在启动时把自己登记进去。
+入口：让所有工具完成自我登记，然后打印工具说明并执行一个工具。
+Go 不能在运行时导入目录里的文件，所以用空导入 tools 包来触发每个工具的 init()。
+tools 是一个包，里面新增或删除工具文件，这里都不用改。
 调用示例：
-  go run main.go
+  go run .
 */
 package main
 
 import (
-	"fmt"                                          // 打印执行结果
+	"fmt"                                          // 打印结果
 
 	"example/tool"                                 // 引入工具登记表
-	_ "example/tools"                              // 空导入：触发工具自我登记
+	_ "example/tools"                              // 空导入：让 tools 包里每个工具自我登记
 )
 
 func main() {
 	fmt.Println(tool.Schema())                     // 打印全部工具的说明
 
-	result, err := tool.Run("read", []byte(`{"path":"./a.txt"}`))  // 执行读取工具
-	if err != nil {
-		fmt.Println(err)                           // 执行失败时打印错误
+	result, err := tool.Run("read", []byte(`{"path":"go.mod"}`))  // 用读取工具读 go.mod
+	if err != nil {                                // 执行失败时打印原因
+		fmt.Println(err)
 		return
 	}
-
 	fmt.Println(result)                            // 打印读到的文件内容
 }
