@@ -17,7 +17,7 @@ class ToolRegistryManager {
         this.eventListeners = {}                   // [违反：平铺直叙] 事件总线，谁响应要运行才知道
 
         // [违反：加删只动一处] 手动登记，加工具改这里，删工具也要改这里
-        // [违反：可预测] 有的工具是类要 new，有的是对象，格式不统一
+        // [违反：加删只动一处] 有的工具是类要 new，有的是对象，格式不统一，加工具前得先猜该写哪种
         this.toolMap.set('read', new ReadTool())
         this.toolMap.set('shell', new ShellTool())
         this.toolMap.set('write', WriteTool)
@@ -54,7 +54,7 @@ class ToolRegistryManager {
         if (toolInput === null || typeof toolInput !== 'object') throw new Error('bad input')
 
         const t = this.toolMap.get(toolName)       // [违反：说人话] t 是什么？
-        if (!t) throw new Error('not found')       // [违反：打开就懂] 抛错打断模型，而不是把结果告诉它
+        if (!t) throw new Error('not found')       // [违反：信任内部数据] 找不到工具是业务里会出现的情况，应该当结果返回给模型，而不是抛错打断
 
         this.emit('beforeExecute', toolName)       // [违反：平铺直叙] 不知道谁在监听、会做什么
 
@@ -70,11 +70,11 @@ class ToolRegistryManager {
             return r
         } catch (e) {
             console.error(e)                       // [违反：信任内部数据] 吞掉真错误
-            return { error: 'something went wrong' }  // [违反：打开就懂] 换成看不出原因的提示
+            return { error: 'something went wrong' }  // [违反：信任内部数据] 真正的原因被换成一句空话，报错不再指向问题所在
         }
     }
 
-    // [违反：装得下] 只被调用一次的小函数，逼读者跳过来看再跳回去
+    // [违反：装得下] 说不清业务、只是挪走一行代码的小函数，逼读者跳过来看再跳回去
     processInput(input, callback) {
         callback(null, JSON.parse(JSON.stringify(input)))
     }

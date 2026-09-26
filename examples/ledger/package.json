@@ -1,0 +1,8 @@
+{
+  "name": "ledger",
+  "description": "个人记账服务：记账、按月列出、删除、月度汇总、导出",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

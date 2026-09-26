@@ -1,6 +1,7 @@
 /*
 读取文件工具：读出指定文件的文本内容。
 这个文件放进 tools 目录就会在启动时自我登记，不用改任何别的文件。
+Go 程序运行时读不到自己的源文件名，所以工具名写在 init() 里，和文件名保持一样。
 调用示例：
   tool.Run("read", []byte(`{"path":"./a.txt"}`))
 */
@@ -17,7 +18,7 @@ import (
 // --- 启动时自我登记 ---
 func init() {
 	tool.Register(tool.Tool{
-		Name:        "read",                       // 工具名，模型按它调用
+		Name:        "read",                       // 工具名，和文件名 read.go 一样
 		Description: "读取指定文件的文本内容",       // 给模型看的用途说明
 		Parameters: json.RawMessage(`{
 			"type": "object",
