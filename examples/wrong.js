@@ -1,94 +1,106 @@
-// 这个文件展示了违反 HOP 规范的典型错误写法
-// 每处错误用 [违反规范名] 标注，与 correct.js 对照阅读
+// 这个文件展示了违反 HOP 规范的典型错误写法，与 js/tool.js 对照阅读
+// 每处错误用 [违反 规范名] 标注
 
-import store from '@/store.js'
-import generateId from '@/utils/generateId.js'
-import { register } from './registry.js'
+import { readFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
+import { readdir } from 'node:fs/promises'
 
-// [违反命名好懂] 使用技术术语 "Manager"，应该直接叫 Task
-// [违反注释] 没有文件头注释，读者不知道这个文件做什么、怎么用
-// [违反注释] import 没有尾随注释
+// [违反 说人话] 文件名应该叫 tool.js，注册表也不需要单独一个文件
+// [违反 免推理] 没有文件头注释，读者不知道这个文件做什么、怎么调用
+// [违反 免推理] import 没有尾随注释
 
-class TaskManager {
-    addTask(title) {
-        // [违反命名好懂] addTask 冗余，应该叫 add
-        // [违反信任数据] 过度校验类型和长度，真正的业务只有几行
-        if (!this.validateInput(title)) {
-            throw new Error('invalid title')
+// [违反 自动化] 每加一个工具都要来这个文件里改两处：import 一行、注册表一行
+import readTool from './tools/read.js'
+import writeTool from './tools/write.js'
+import shellTool from './tools/shell.js'
+
+// [违反 说人话] ToolRegistry 概念过大，术语堆砌
+class ToolRegistry {
+    // [违反 说人话] 变量名带类型后缀
+    private toolsMap: Map<string, any>
+
+    constructor() {
+        // [违反 自动化] 手动登记，加一个工具就要在这里加一行
+        // [违反 可预测] 有的工具是类，有的工具是对象，形状不统一
+        this.toolsMap = new Map()
+        this.toolsMap.set('read', new readTool())
+        this.toolsMap.set('write', new writeTool())
+        this.toolsMap.set('shell', new shellTool())
+        // [违反 免推理] 这一大段没有任何注释
+    }
+
+    // [违反 说人话] getToolsSchemaList 又长又术语化，应该叫 schema
+    public getToolsSchemaList(): any[] {
+        const result: any[] = []
+        // [违反 装得下] 一个函数里同时有循环、条件、类型判断、兜底四件事
+        for (const [key, value] of this.toolsMap.entries()) {
+            if (value && typeof value === 'object') {
+                if (value.getDescription && typeof value.getDescription === 'function') {
+                    if (value.getParameters && typeof value.getParameters === 'function') {
+                        result.push({
+                            name: key,
+                            description: value.getDescription(),
+                            parameters: value.getParameters(),
+                        })
+                    } else {
+                        // [违反 免推理] 这个分支防的是什么情况？没人知道
+                        console.warn('tool missing parameters', key)
+                    }
+                } else {
+                    console.warn('tool missing description', key)
+                }
+            } else {
+                // [违反 免推理] 兜底分支把真问题藏起来了
+                console.error('invalid tool', key)
+            }
         }
-        // [违反逻辑集中] validateInput 只在这里用一次，却跳出去找，不如就地写
+        return result
+    }
 
-        const id = generateId()
-        const task = {
-            id,
-            title: title.trim(),
-            done: false,
-            createdAt: Date.now(),     // [违反解决根本] 没人用的字段
-            updatedAt: Date.now(),     // [违反解决根本] 没人用的字段
-            version: 1,               // [违反解决根本] 没人用的字段
+    // [违反 说人话] executeToolByName 冗余，应该叫 run
+    public async executeToolByName(toolName: string, input: any): Promise<any> {
+        // [违反 免推理] 内部代码做了大量防御校验
+        if (!toolName || typeof toolName !== 'string') {
+            throw new TypeError('toolName must be a non-empty string')
         }
-        store.tasks.push(task)
-        return id
-        // [违反业务逻辑优先] 校验占了大半，业务逻辑被淹没
-        // [违反注释] 整个函数没有业务注释
-    }
-
-    validateInput(text) {
-        // [违反逻辑集中] 只用一次的检查提取成单独方法，读者要跳转才能理解
-        return typeof text === 'string' && text.trim().length > 0
-    }
-
-    deleteTask(taskId) {
-        // [违反命名好懂] deleteTask 冗余，应该叫 remove
-        // [违反信任数据] 校验 taskId 类型——内部代码应信任数据
-        if (!taskId || typeof taskId !== 'string') {
-            throw new Error('invalid taskId')
+        if (toolName.length > 64) {
+            throw new Error('toolName too long')
         }
-        const index = store.tasks.findIndex(t => t.id === taskId)
-        if (index === -1) {
-            throw new Error(`task ${taskId} not found`)  // [违反信任数据] 不存在返回即可，不需要抛错
+        if (!input || typeof input !== 'object') {
+            throw new Error('input must be an object')
         }
-        store.tasks.splice(index, 1)
-    }
 
-    /**
-     * @description 切换任务状态
-     * @param {string} taskId - 任务ID
-     * @returns {void}
-     */
-    // [违反注释] 使用 JSDoc 标注格式，HOP 要求大白话
-    toggleTask(taskId) {
-        // [违反命名好懂] toggleTask 冗余，应该叫 toggle
-        const task = store.tasks.find(t => t.id === taskId)
-        if (task) task.done = !task.done
-        // [违反注释] 没有卫语句提前返回，判断和操作混在一起
-    }
+        const tool = this.toolsMap.get(toolName)    // [违反 说人话] 变量名可以有意义的
+        if (!tool) {
+            // [违反 可预测] 找不到工具时抛错，而不是返回一条结果让模型知道
+            throw new Error(`tool not found: ${toolName}`)
+        }
 
-    getTaskById(taskId) {
-        // [违反命名好懂] getTaskById 冗余，应该叫 get
-        return store.tasks.find(t => t.id === taskId)
-    }
-
-    getPendingTasks() {
-        // [违反命名好懂] getPendingTasks 冗余，应该叫 pending
-        return store.tasks.filter(t => !t.done)
-    }
-
-    getCompletedTasks() {
-        // [违反命名好懂] getCompletedTasks 冗余，应该叫 done
-        return store.tasks.filter(t => t.done)
-    }
-
-    clearCompleted() {
-        // [违反增删改方便] 直接替换整个数组，破坏了别处对原数组的引用
-        store.tasks = store.tasks.filter(t => !t.done)
-        // [违反注释] 没有注释
+        try {
+            // [违反 平铺直叙] 回调套 Promise 套 try，控制流跳来跳去
+            return await new Promise((resolve, reject) => {
+                tool.execute(input, (err: any, data: any) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve(data)
+                    }
+                })
+            })
+        } catch (error) {
+            // [违反 免推理] 把真错误吞掉，换成看不懂的提示
+            console.error('tool execution failed', error)
+            return { error: 'something went wrong' }
+        }
     }
 }
 
-const manager = new TaskManager()
-register(manager)    // [违反增删改方便] 手动注册，删掉这个模块还要回来删这行
+// [违反 自动化] 手写一个假的扫描函数，实际上什么也不扫
+async function scanToolsDirectory(directory: string): Promise<void> {
+    const fileList = await readdir(directory)
+    // [违反 自动化] 扫完不用，还是靠上面手动登记的那张表
+    console.log('found files but not registering them:', fileList.length)
+}
 
-export default manager
-// [违反命名好懂] 导出 class 实例而不是纯函数对象
-// [违反注释] export 没有注释
+// [违反 可预测] 导出一个全局实例，别处 import 就能改它的内部状态
+export default new ToolRegistry()
