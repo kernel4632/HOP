@@ -5,13 +5,13 @@ import store from '@/store.js'
 import generateId from '@/utils/generateId.js'
 import { register } from './registry.js'
 
-// [违反极简命名] 使用技术术语 "Manager"，应该直接叫 Task
+// [违反命名好懂] 使用技术术语 "Manager"，应该直接叫 Task
 // [违反注释] 没有文件头注释，读者不知道这个文件做什么、怎么用
 // [违反注释] import 没有尾随注释
 
 class TaskManager {
     addTask(title) {
-        // [违反极简命名] addTask 冗余，应该叫 add
+        // [违反命名好懂] addTask 冗余，应该叫 add
         // [违反信任数据] 过度校验类型和长度，真正的业务只有几行
         if (!this.validateInput(title)) {
             throw new Error('invalid title')
@@ -39,7 +39,7 @@ class TaskManager {
     }
 
     deleteTask(taskId) {
-        // [违反极简命名] deleteTask 冗余，应该叫 remove
+        // [违反命名好懂] deleteTask 冗余，应该叫 remove
         // [违反信任数据] 校验 taskId 类型——内部代码应信任数据
         if (!taskId || typeof taskId !== 'string') {
             throw new Error('invalid taskId')
@@ -58,24 +58,24 @@ class TaskManager {
      */
     // [违反注释] 使用 JSDoc 标注格式，HOP 要求大白话
     toggleTask(taskId) {
-        // [违反极简命名] toggleTask 冗余，应该叫 toggle
+        // [违反命名好懂] toggleTask 冗余，应该叫 toggle
         const task = store.tasks.find(t => t.id === taskId)
         if (task) task.done = !task.done
         // [违反注释] 没有卫语句提前返回，判断和操作混在一起
     }
 
     getTaskById(taskId) {
-        // [违反极简命名] getTaskById 冗余，应该叫 get
+        // [违反命名好懂] getTaskById 冗余，应该叫 get
         return store.tasks.find(t => t.id === taskId)
     }
 
     getPendingTasks() {
-        // [违反极简命名] getPendingTasks 冗余，应该叫 pending
+        // [违反命名好懂] getPendingTasks 冗余，应该叫 pending
         return store.tasks.filter(t => !t.done)
     }
 
     getCompletedTasks() {
-        // [违反极简命名] getCompletedTasks 冗余，应该叫 done
+        // [违反命名好懂] getCompletedTasks 冗余，应该叫 done
         return store.tasks.filter(t => t.done)
     }
 
@@ -90,5 +90,5 @@ const manager = new TaskManager()
 register(manager)    // [违反增删改方便] 手动注册，删掉这个模块还要回来删这行
 
 export default manager
-// [违反极简命名] 导出 class 实例而不是纯函数对象
+// [违反命名好懂] 导出 class 实例而不是纯函数对象
 // [违反注释] export 没有注释
