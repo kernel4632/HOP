@@ -47,7 +47,3 @@ examples/
 ## 适用范围
 
 语言无关（JavaScript、Python、Go、Rust、Java 等），框架无关（Vue、React、FastAPI、Gin 等），阶段无关（架构设计、编码、重构、审查、调试全流程生效）。
-
-## 协议
-
-MIT License

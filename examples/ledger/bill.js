@@ -31,6 +31,7 @@ function save(bills) {
 
 // --- 记一笔账 ---
 function add({ amount, category, note = '', date }) {
+    category = String(category ?? '').trim()                                 // 先去掉分类首尾的空格；没填或只填了空格，都会变成空的
     if (!(amount > 0)) throw fail(400, '金额要是大于 0 的数字')              // 用户输入的检查只在这里做一次
     if (!category) throw fail(400, '要填一个分类')                           // 没有分类就没法汇总
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw fail(400, '日期要写成 2026-09-27 这样')  // 日期决定这笔账算哪个月
