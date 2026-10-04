@@ -220,7 +220,9 @@ workers/execution_worker.py
 
 接手者词汇量有限，也会被名字误导。
 
-名字用普通人日常就认识的词，标准是没有编程背景也看得懂。`summary`、`export`、`report`、`format` 这类日常词可以用；`repository`、`dispatcher`、`middleware`、`handler` 这类只有程序员才懂的词不用。业务或行业里本来就这么叫的名字直接用，比如 `csv`、`markdown`、`http`。同类库或框架普遍用的标准词也直接用——接手者在其他项目见过这个词，他就认识，比如 `maxTokens`、`schema`、`callback`；换成"更白话"的词反而增加他在多个库之间切换的负担。
+名字用普通人日常就认识的词，标准是没有编程背景也看得懂。`summary`、`export`、`report`、`format` 这类日常词可以用；`repository`、`dispatcher`、`middleware`、`handler` 这类只有程序员才懂的词不用。业务或行业里本来就这么叫的名字直接用，比如 `csv`、`markdown`、`http`。
+
+**同时，在达到"看得懂"这个前提下**，如果一个词恰好也是同类库或框架里的标准说法，就直接用那个词——不要换。接手者在其他项目见过这个词就认识，比如 `maxTokens`、`schema`、`callback`；换成"更白话"但生态不用的词，反而让他在多个库之间切换时多花力气做映射。判断标准是：**这个词能不能让一个完全陌生的接手者（包括不懂这门语言的人）光看名字就明白这是什么东西**。`maxTokens` 能猜是"最大 token 数"，`schema` 能猜是"结构定义"或"格式"，即使你从没见过这个库也能推出来。如果名字无法推敲、看起来像黑魔法（`flatten`、`compact`、`denormalize`），才改成白话。
 
 文件名就是里面那个东西的名字。业务主体的名字是名词，比如 `order.js`、`budget.py`；一类会增加的东西里的一个，文件名就是它自己的名字，比如叫 `read` 的工具就是 `tools/read.js`，叫 `alipay` 的支付方式就是 `payments/alipay.js`。不用"动作加技术角色"拼出来的名字，比如 `execution_worker.py`、`recall_services.py`。
 
