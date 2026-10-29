@@ -1,6 +1,6 @@
 # HOP — Human-Oriented Programming
 
-面向人类编程（HOP）是一套从接手者的弱点推导出来的项目规范。人会累、会忘、没耐心、看不懂术语，新开会话的 AI 也一样。HOP 让 AI 写出来的项目，任何人零背景打开都能很快找到要改的地方，放心地改，加东西直接加，删东西直接删。
+面向人类编程（HOP）是一套从接手者的弱点推导出来的编程思路。人会累、会忘、没耐心、看不懂术语，新开会话的 AI 也一样。HOP 让 AI 写出来的项目，任何人零背景打开都能很快找到要改的地方，放心地改，加东西直接加，删东西直接删。
 
 ## 安装
 
@@ -37,9 +37,9 @@ git clone https://github.com/kernel4632/HOP.git ~/.claude/skills/hop
 ## 内容
 
 ```
-SKILL.md          规范本身
+SKILL.md          正文
 examples/
-  ledger/         按规范写的完整小项目（记账服务），node server.js 直接运行
+  ledger/         按这份思路写的完整小项目（记账服务），node server.js 直接运行
   js/ py/ go/     同一个"放进文件夹就生效"的工具系统，三种语言写法
   wrong.js        反面写法，逐处标注违反了哪条
 ```

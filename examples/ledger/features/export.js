@@ -3,15 +3,15 @@
 启动时自动扫描 formats 文件夹，加一种格式只要放一个文件进去，删掉文件这种格式就没了，这个文件不用改。
 每个格式文件默认导出两样：type（文件类型，比如 text/csv）和 make(bills)（把账单转成文字）。
 调用示例：
-  import Export from './export.js'
+  import Export from './features/export.js'
   await Export.scan()
   const file = Export.make('csv', '2026-09')   // 得到 { type, text }
 */
 import { readdirSync } from 'node:fs'             // 列出 formats 文件夹里的文件
 import Bill from './bill.js'                       // 导出要用到账单
-import fail from './fail.js'                       // 格式名不对时，做一个带状态码的错误
+import fail from '../utils/fail.js'                // 格式名不对时，做一个带状态码的错误
 
-const folder = new URL('./formats/', import.meta.url)  // 放各种格式的文件夹
+const folder = new URL('../formats/', import.meta.url)  // 放各种格式的文件夹，和主体层平级
 const formats = {}                                 // 已登记的格式，键是格式名，比如 csv
 
 

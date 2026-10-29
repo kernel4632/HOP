@@ -2,7 +2,7 @@
 账单：记账这件事的全部操作都在这里。账单数据只有这个文件会读写，存在 bills.json。
 每一笔账长这样：{ id, amount, category, note, date }，金额单位是元，日期写成 2026-09-27。
 调用示例：
-  import Bill from './bill.js'
+  import Bill from './features/bill.js'
   const bill = Bill.add({ amount: 12.5, category: '吃饭', note: '午饭', date: '2026-09-27' })
   const list = Bill.list('2026-09')
   Bill.remove(bill.id)
@@ -10,7 +10,7 @@
 */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'  // 读写账单数据文件
 import { randomUUID } from 'node:crypto'           // 给每一笔账生成不会重复的编号
-import fail from './fail.js'                       // 用户输入不对时，做一个带状态码的错误
+import fail from '../utils/fail.js'                 // 用户输入不对时，做一个带状态码的错误
 
 const file = new URL('./bills.json', import.meta.url)  // 账单数据文件，和这个文件放在一起
 

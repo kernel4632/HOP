@@ -11,9 +11,9 @@
   GET    /export?format=csv&month=2026-09   导出，format 可以是 formats 文件夹里有的任何格式
 */
 import { createServer } from 'node:http'          // 建一个 HTTP 服务
-import Bill from './bill.js'                       // 账单的全部操作
-import Export from './export.js'                   // 导出操作
-import fail from './fail.js'                       // 请求内容写错时，做一个带状态码的错误
+import Bill from './features/bill.js'                // 账单的全部操作
+import Export from './features/export.js'            // 导出操作
+import fail from './utils/fail.js'                   // 请求内容写错时，做一个带状态码的错误
 
 await Export.scan()                                // 启动时先登记好全部导出格式
 
